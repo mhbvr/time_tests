@@ -14,12 +14,16 @@ long delta_ns(struct timespec begin, struct timespec end) {
 
 void histogram(int buckets, long bucket_int, long *data, long n) {
     long* hist = (long *)malloc((buckets+1)*sizeof(long));
-    long i;
+    long i, b;
 
     for (i = 0; i < n; i++) {
-        long bu
-        if (data[i]/bucket_int > buckets-1) {
+        b = data[i]/bucket_int;
+        if (b > buckets) {
+            ++hist[buckets + 1];
         }
+        else
+            ++hist[b];
+
     }
 }
 
