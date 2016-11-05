@@ -34,3 +34,7 @@
 
 # .idea dirs
 .idea/*
+
+# Temporary files
+build/*
+tmp/*

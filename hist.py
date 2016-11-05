@@ -48,30 +48,36 @@ class Hist(object):
             return None
 
     def sigma(self):
-        if self.num:
-            sigma_sqr = self.sum_sqr/self.num- self.avg()**2
+        if self.num > 1:
+            sigma_sqr = self.sum_sqr/(self.num-1) - (self.avg()*self.num/(self.num-1))**2
             return math.sqrt(sigma_sqr)
         else:
             return None
 
     def iter_buckets(self):
-        yield ("#Less {0}:".format(self.min), self.less)
+        #yield ("#Less {0}:".format(self.min), self.less)
         for i, b in enumerate(self.buckets):
             yield (self.min + (i+1)*self.bucket_int, b)
-        yield ("#More {0}:".format(self.max), self.more)
+        #yield ("#More {0}:".format(self.max), self.more)
+
+    def pprint(self):
+        print "# Number of values: {0}".format(self.num)
+        print "# Avg: {0}".format(self.avg())
+        print "# Sigma: {0}".format(self.sigma())
+        print "# Histogram:"
+        print "# Less {0}:".format(self.min), self.less
+        for j, v in self.iter_buckets():
+            print j, v
+        print "# More {0}:".format(self.max), self.more
 
 def test():
     h = Hist(0, 20, bucket_int=0.5)
 
-    for i in range(1000000):
+    for i in range(10000):
         l = random.gauss(10,3)
         h.add_value(l)
 
-    print "#Avg: {0}".format(h.avg())
-    print "#Sigma: {0}".format(h.sigma())
-    print "#Histogram:"
-    for j, v in h.iter_buckets():
-        print j, v
+    h.pprint()
 
 if __name__ == "__main__":
     test()
