@@ -20,7 +20,7 @@ void die(char *s) {
     exit(EXIT_FAILURE);
 }
 
-long delta_ns(struct timespec begin, struct timespec end) {
+static inline long delta_ns(struct timespec begin, struct timespec end) {
     return (end.tv_sec - begin.tv_sec) * 1000000000 + end.tv_nsec - begin.tv_nsec;
 }
 

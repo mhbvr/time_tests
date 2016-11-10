@@ -22,7 +22,7 @@ def main():
     print "# Total: {0}".format(count)
     print "# Errors: {0} ({1}%)".format(errors, float(errors)/count * 100)
     aa_hist.pprint()
-    ab_hist.pprint()
+#    ab_hist.pprint()
 
 
 if __name__ == "__main__":

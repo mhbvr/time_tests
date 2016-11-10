@@ -7,5 +7,8 @@ add_executable(clock_gettime_res clock_gettime_res.c)
 add_executable(ptp_clock_check ptp_clock_check.c)
 add_executable(udp_ping udp_ping.c)
 add_executable(udp_pong udp_pong.c)
+add_executable(lat_stor_test lat_stor_test.c utils.c)
+
 target_link_libraries(clock_gettime_res rt)
 target_link_libraries(ptp_clock_check rt)
+target_link_libraries(lat_stor_test rt m)

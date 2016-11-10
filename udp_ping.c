@@ -63,11 +63,19 @@ int main(int argc, char **argv) {
     printf("Sending data...\n");
     fflush(stdout);
     size_t len = sizeof(struct timestamp);
-    clock_gettime(CLOCK_REALTIME, &ts_data.send);
-    sendto(sock, (void *)&ts_data, len, 0, (const struct sockaddr *)dst->ai_addr, sizeof(struct sockaddr));
-    recv(sock, (void *)&ts_data, len, 0);
-    clock_gettime(CLOCK_REALTIME, &recv_ts);
-    printf("A->B: %li B->A: %li, A->B->A: %li\n", delta_ns(ts_data.send, ts_data.echo), delta_ns(ts_data.echo, recv_ts),delta_ns(ts_data.send, recv_ts));
+    int i;
+    long delta[30];
+    for (i=0; i < 30; i++) {
+        clock_gettime(CLOCK_MONOTONIC_RAW, &ts_data.send);
+        sendto(sock, (void *) &ts_data, len, 0, (const struct sockaddr *) dst->ai_addr, sizeof(struct sockaddr));
+        recv(sock, (void *) &ts_data, len, 0);
+        clock_gettime(CLOCK_MONOTONIC_RAW, &recv_ts);
+        delta[i] = delta_ns(ts_data.send, recv_ts);
+    }
+    for (i=0; i < 30; i++) {
+        printf("A->B: 0 B->A: 0, A->B->A: %li\n", delta[i]);
+        //printf("A->B: %li B->A: %li, A->B->A: %li\n", delta_ns(ts_data.send, ts_data.echo), delta_ns(ts_data.echo, recv_ts),delta_ns(ts_data.send, recv_ts));
+    }
     close(sock);
     return EXIT_SUCCESS;
 }
