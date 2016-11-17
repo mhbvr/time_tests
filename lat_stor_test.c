@@ -36,9 +36,9 @@ void buffer_test(uint32_t n) {
     struct point p;
 
     for (i = 0 ;i < n; i++) {
-        clock_gettime(CLOCK_MONOTONIC, &start);
         p.ts = start;
         p.latency = delta_ns(start, end);
+        clock_gettime(CLOCK_MONOTONIC, &start);
         buffer_add_point(&p, buff);
         clock_gettime(CLOCK_MONOTONIC, &end);
         sum += delta_ns(start, end);
