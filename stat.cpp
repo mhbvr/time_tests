@@ -21,25 +21,27 @@ public:
 
 
 class LatHist {
-    uint64_t max_buckets;
-    uint64_t max_outliers;
+    uint64_t max_hist_value;
     uint8_t log_interval;
-    uint64_t tot_outliers = 0;
+    uint64_t max_outliers;
+    uint64_t max_buckets;
     uint64_t sum = 0;
     uint64_t sqr_sum = 0;
     std::vector<uint64_t> buckets;
     std::vector<Point> outliers;
 
 public:
-    LatHist(uint32_t max_buckets, uint8_t log_interval, uint32_t max_outliers):
-            max_buckets(max_buckets),
-            max_outliers(max_outliers),
+    LatHist(uint32_t max_hist_value, uint8_t log_interval, uint32_t max_outliers):
+            max_hist_value(max_hist_value),
             log_interval(log_interval),
+            max_outliers(max_outliers),
+            max_buckets(max_hist_value/(1 << log_interval)),
             buckets(max_buckets, 0),
             outliers(max_outliers) {}
     uint64_t min_value = 0;
     uint64_t max_value = 0;
     uint64_t tot_points = 0;
+    uint64_t tot_outliers = 0;
 
     void add_value(uint64_t value){
         struct timespec timestamp;
@@ -53,7 +55,6 @@ public:
     }
 
     void add_value(uint64_t value, struct timespec timestamp){
-        uint64_t max_hist_value;
         uint64_t bucket;
 
         ++tot_points;
@@ -66,7 +67,7 @@ public:
         if (value < min_value) {
             min_value = value;
         }
-        max_hist_value = (1 << log_interval) * max_buckets;
+
         if (value > max_hist_value) {
             if (tot_outliers < max_outliers) {
                 outliers[tot_outliers] = (Point(timestamp, value));
@@ -120,18 +121,10 @@ public:
 
 
 int main(int argv, char**argc) {
-    std::random_device rd;
-    std::normal_distribution<> distrib(200,60);
     int i;
     struct timespec start, end, tmp;
 
-    LatHist hist(100, 2, 1000);
-    LatHist hist2(100, 2, 1000);
-//    for(i=0; i<100000; i++) {
-//        hist.add_value(std::round(std::abs(distrib(rd))));
-//    }
-//    std::cout << hist;
-
+    LatHist hist(1000, 3, 1000);
 
     for(i=0; i<1000000; i++) {
         tmp = start;
