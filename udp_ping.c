@@ -67,10 +67,10 @@ int main(int argc, char **argv) {
     int i;
     long delta[COUNT];
     for (i=0; i < COUNT; i++) {
-        clock_gettime(CLOCK_MONOTONIC_RAW, &ts_data.send);
+        clock_gettime(CLOCK_REALTIME, &ts_data.send);
         sendto(sock, (void *) &ts_data, len, 0, (const struct sockaddr *) dst->ai_addr, sizeof(struct sockaddr));
         recv(sock, (void *) &ts_data, len, 0);
-        clock_gettime(CLOCK_MONOTONIC_RAW, &recv_ts);
+        clock_gettime(CLOCK_REALTIME, &recv_ts);
         delta[i] = delta_ns(ts_data.send, recv_ts);
     }
     for (i=0; i < COUNT; i++) {
