@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     /* Data receive loop */
     while(1) {
         recvfrom(sock, (void *)&ts_data, timesptamp_len, 0, (struct sockaddr *)&client_addr, &addr_len);
-        //clock_gettime(CLOCK_REALTIME, &ts_data.echo);
+        clock_gettime(CLOCK_REALTIME, &ts_data.echo);
         sendto(sock, (void *)&ts_data, timesptamp_len, 0, (struct sockaddr *)&client_addr, sizeof(struct sockaddr_in));
     }
     close(sock);
