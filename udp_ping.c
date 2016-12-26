@@ -65,17 +65,21 @@ int main(int argc, char **argv) {
     fflush(stdout);
     size_t len = sizeof(struct timestamp);
     int i;
-    long delta[COUNT];
+    long delta_ab[COUNT];
+    long delta_ba[COUNT];
+    long delta_tot[COUNT];
     for (i=0; i < COUNT; i++) {
         clock_gettime(CLOCK_REALTIME, &ts_data.send);
         sendto(sock, (void *) &ts_data, len, 0, (const struct sockaddr *) dst->ai_addr, sizeof(struct sockaddr));
         recv(sock, (void *) &ts_data, len, 0);
         clock_gettime(CLOCK_REALTIME, &recv_ts);
-        delta[i] = delta_ns(ts_data.send, recv_ts);
+        delta_tot[i] = delta_ns(ts_data.send, recv_ts);
+        delta_ab[i] = delta_ns(ts_data.send, ts_data.echo);
+        delta_ba[i] = delta_ns(ts_data.echo, recv_ts);
     }
     for (i=0; i < COUNT; i++) {
         //printf("A->B: 0 B->A: 0, A->B->A: %li\n", delta[i]);
-        printf("A->B: %li B->A: %li, A->B->A: %li\n", delta_ns(ts_data.send, ts_data.echo), delta_ns(ts_data.echo, recv_ts),delta_ns(ts_data.send, recv_ts));
+        printf("A->B: %li B->A: %li, A->B->A: %li\n", delta_ab[i], delta_ba[i], delta_tot[i]);
     }
     close(sock);
     return EXIT_SUCCESS;
