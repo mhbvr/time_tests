@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(time_tests)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -std=c++0x")
 set(SOURCE_FILES clock_gettime_res.c)
 add_executable(clock_gettime_res clock_gettime_res.c)
 add_executable(ptp_clock_check ptp_clock_check.c)
