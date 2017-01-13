@@ -5,6 +5,7 @@
 #ifndef TIME_TESTS_COMMON_H
 #define TIME_TESTS_COMMON_H
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 /* Struct to measure communication time */
